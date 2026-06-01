@@ -2,7 +2,7 @@
 
 This project evaluates a TabPFN/ICL-FM-style workflow for small-data materials property prediction on selected Matbench regression tasks, then extends the baseline with lightweight structure-aware features.
 
-The main scientific question is not whether TabPFN always wins. The stronger result is that physically meaningful structure descriptors substantially improve TabPFN performance on structure-dependent materials tasks.
+The main result is that physically meaningful structure descriptors substantially improve TabPFN performance on structure-dependent materials tasks.
 
 ## Start Here
 
