@@ -1,0 +1,24 @@
+.DS_Store
+.venv/
+__pycache__/
+*.py[cod]
+*.swp
+.ipynb_checkpoints/
+.tmp/
+tmp/
+output/
+
+# Heavy/generated artifacts
+results/features/*
+results/logs/*
+results/predictions/*
+results/runs/*
+results/metrics/*_fold_metrics.csv
+results/latest
+results/latest_run.txt
+
+# Keep folder placeholders
+!results/features/.gitkeep
+!results/logs/.gitkeep
+!results/predictions/.gitkeep
+!results/runs/.gitkeep

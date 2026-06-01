@@ -1,0 +1,17 @@
+task,proxy_best_model,proxy_best_model_display,proxy_mean_mae,structure_feature_set,structure_feature_set_display,structure_branch_rank_by_mae,structure_best_model,structure_best_model_display,structure_mean_mae,mae_delta_structure_minus_proxy,mae_pct_change_structure_minus_proxy
+matbench_jdft2d,tabpfn,TabPFN,46.13013884439926,magpie_structure_all,Magpie + all structure,1,tabpfn,TabPFN,34.39592203788164,-11.734216806517622,-25.43720244610166
+matbench_jdft2d,tabpfn,TabPFN,46.13013884439926,magpie_density_packing,Magpie + density + packing,2,tabpfn,TabPFN,34.82078784923712,-11.309350995162141,-24.516186767417956
+matbench_jdft2d,tabpfn,TabPFN,46.13013884439926,magpie_density_packing_symmetry,Magpie + density + packing + symmetry,3,tabpfn,TabPFN,34.96278593035964,-11.167352914039625,-24.208366143678912
+matbench_jdft2d,tabpfn,TabPFN,46.13013884439926,magpie_density_packing_complexity,Magpie + density + packing + complexity,4,tabpfn,TabPFN,35.09316664636881,-11.036972198030455,-23.925729413603257
+matbench_jdft2d,tabpfn,TabPFN,46.13013884439926,magpie_density,Magpie + density,5,tabpfn,TabPFN,36.007937966554294,-10.122200877844968,-21.942706290106734
+matbench_jdft2d,tabpfn,TabPFN,46.13013884439926,magpie_packing,Magpie + packing,6,tabpfn,TabPFN,36.6971680979237,-9.432970746475561,-20.448606882137828
+matbench_jdft2d,tabpfn,TabPFN,46.13013884439926,magpie_complexity,Magpie + complexity,7,tabpfn,TabPFN,43.037673611401736,-3.092465232997526,-6.703784793340129
+matbench_jdft2d,tabpfn,TabPFN,46.13013884439926,magpie_symmetry,Magpie + symmetry,8,tabpfn_extra_trees_ensemble,TabPFN + ExtraTrees 50/50,43.18679636047248,-2.9433424839267843,-6.380519455740031
+matbench_phonons,tabpfn,TabPFN,36.853154223021924,magpie_structure_all,Magpie + all structure,1,tabpfn,TabPFN,30.63097806308275,-6.222176159939174,-16.883700435205142
+matbench_phonons,tabpfn,TabPFN,36.853154223021924,magpie_density_packing_complexity,Magpie + density + packing + complexity,2,tabpfn,TabPFN,30.985622137435264,-5.86753208558666,-15.921383689652409
+matbench_phonons,tabpfn,TabPFN,36.853154223021924,magpie_density_packing_symmetry,Magpie + density + packing + symmetry,3,tabpfn,TabPFN,31.108186094299988,-5.744968128721936,-15.588809831461027
+matbench_phonons,tabpfn,TabPFN,36.853154223021924,magpie_density_packing,Magpie + density + packing,4,tabpfn,TabPFN,31.1280827344103,-5.725071488611626,-15.53482085675915
+matbench_phonons,tabpfn,TabPFN,36.853154223021924,magpie_packing,Magpie + packing,5,tabpfn,TabPFN,31.63813501805729,-5.215019204964634,-14.15080829555383
+matbench_phonons,tabpfn,TabPFN,36.853154223021924,magpie_density,Magpie + density,6,tabpfn,TabPFN,32.263464101340034,-4.58969012168189,-12.453995372843123
+matbench_phonons,tabpfn,TabPFN,36.853154223021924,magpie_symmetry,Magpie + symmetry,7,tabpfn,TabPFN,34.631008259155585,-2.222145963866339,-6.029730726490106
+matbench_phonons,tabpfn,TabPFN,36.853154223021924,magpie_complexity,Magpie + complexity,8,tabpfn,TabPFN,35.409783705517455,-1.4433705175044693,-3.916545402788902

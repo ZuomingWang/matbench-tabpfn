@@ -1,0 +1,48 @@
+run:
+  base_dir: results/runs
+  clean_existing_run_dir: false
+  update_latest_pointer: true
+  primary_metric: mae
+  random_seed: 42
+
+tasks:
+  - matbench_steels
+  - matbench_jdft2d
+  - matbench_phonons
+  - matbench_expt_gap
+
+models:
+  - dummy_mean
+  - ridge_cv
+  - random_forest
+  - extra_trees
+  - hist_gradient_boosting
+  - tabpfn
+
+features:
+  feature_sets:
+    - magpie
+    - magpie_density
+    - magpie_symmetry
+    - magpie_packing
+    - magpie_density_packing
+    - magpie_density_packing_symmetry
+    - magpie_complexity
+    - magpie_density_packing_complexity
+    - magpie_structure_all
+  use_cache: true
+  show_progress: true
+  n_jobs: 1
+  note: Structure feature branches are only run for structure-input tasks. They add single descriptor groups, targeted density/packing/symmetry/complexity combinations, or all structural descriptors to Magpie composition features.
+
+classical_models:
+  n_estimators: 500
+
+tabpfn:
+  device: cuda
+  n_estimators: 8
+  predict_batch_size: 128
+  kwargs:
+    inference_precision: auto
+    memory_saving_mode: auto
+    show_progress_bar: false

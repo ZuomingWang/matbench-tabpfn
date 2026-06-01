@@ -1,0 +1,22 @@
+# Prefer `conda env create -f environment.yml`.
+#
+# For a pip-only fallback, install this file first, then install Matbench with:
+# python -m pip install --no-deps matbench==0.6
+#
+# Do not put matbench directly in this file. Its package metadata pins old
+# scipy/sklearn/matminer versions that fail on current macOS arm64 builds.
+numpy<3
+pandas<3
+scikit-learn>=1.3,<2
+scipy>=1.11
+matminer==0.10.1
+pymatgen>=2023
+tabpfn==8.0.3
+matplotlib
+seaborn
+jupyter
+ipykernel
+joblib
+tqdm
+shap
+pyyaml
