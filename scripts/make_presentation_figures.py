@@ -14,8 +14,8 @@ Colour system (colourblind-safe, consistent across every figure):
 
 Outputs (PNG @ 200 dpi + PDF) go to:  presentation_graphs/
 
-Run with the project conda env:
-    /Users/zuoming/miniforge3/envs/matbench-tabpfn/bin/python scripts/make_presentation_figures.py
+Run with the project conda environment:
+    python scripts/make_presentation_figures.py
 """
 
 from __future__ import annotations

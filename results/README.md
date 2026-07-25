@@ -1,6 +1,8 @@
 # Results Folder
 
-This folder contains the latest synced result summaries and figures.
+This folder contains the latest synced result summaries and figures. The
+top-level `metrics/`, `tables/`, and `figures/` directories describe the
+primary TabPFN/classical-model benchmark.
 
 Most useful files:
 
@@ -11,5 +13,18 @@ Most useful files:
 - `tables/auto_summary.md`: generated text summary of the run.
 - `figures/03_tabpfn_vs_best_baseline.png`: TabPFN relative to the best classical baseline.
 - `figures/05_structure_feature_branch_comparison.png`: structure-feature branch ablation.
+- `diagnostics/mlp/`: curated MLP and tuned-MLP summaries, fold metrics,
+  configurations, and compact figures.
 
-Large generated files such as raw predictions, feature caches, logs, and rerun directories are ignored by Git by default.
+Timestamped diagnostic runs are created locally in:
+
+```text
+results/small_data_diagnostics/
+results/active_learning_screening/
+results/mlp_baseline_diagnostics/
+results/tuned_mlp_baseline_diagnostics/
+```
+
+These run trees can contain raw predictions, feature caches, logs, and other
+generated artifacts, so they are ignored by Git. Only compact, presentation-
+relevant summaries should be copied into `results/diagnostics/`.

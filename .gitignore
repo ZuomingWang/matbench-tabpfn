@@ -17,6 +17,17 @@ results/metrics/*_fold_metrics.csv
 results/latest
 results/latest_run.txt
 
+# Diagnostic run directories. Curated summaries belong in
+# results/diagnostics/; raw features, predictions, logs, and run snapshots do not.
+results/small_data_diagnostics/
+results/active_learning_screening/
+results/mlp_baseline_diagnostics/
+results/tuned_mlp_baseline_diagnostics/
+
+# Local extraction/staging folders
+results 2/
+nn_baseline_results.zip
+
 # Keep folder placeholders
 !results/features/.gitkeep
 !results/logs/.gitkeep
