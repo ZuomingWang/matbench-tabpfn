@@ -1,0 +1,89 @@
+# Exact extension workflow represented in the June 8, 2026 presentation.
+#
+# This file is a human-readable run manifest. The underlying runners remain
+# the original files contributed by Kyle Xu; this manifest does not replace or
+# modify them.
+
+shared:
+  random_seed: 42
+  tasks:
+    - matbench_jdft2d
+    - matbench_phonons
+  feature_sets:
+    - magpie
+    - magpie_structure_all
+  official_folds: all
+  tabpfn:
+    device: cuda
+    n_estimators: 8
+    predict_batch_size: 128
+
+small_data:
+  runner: scripts/run_small_data_diagnostics.py
+  models:
+    - extra_trees
+    - tabpfn
+  fractions:
+    - 0.1
+    - 0.2
+    - 0.4
+    - 0.6
+    - 0.8
+    - 1.0
+  repeats: 1
+  postprocess: scripts/summarize_small_data_diagnostics.py
+  presentation_slides:
+    - 14
+    - 15
+    - 16
+
+mlp:
+  runner: scripts/run_mlp_baseline_diagnostics.py
+  use_runner_defaults: true
+  presentation_slides:
+    - 17
+    - 19
+
+tuned_mlp:
+  runner: scripts/run_tuned_mlp_baseline_diagnostics.py
+  use_runner_defaults: true
+  selection: inner_validation_within_each_official_training_fold
+  presentation_slides:
+    - 17
+    - 18
+    - 19
+
+active_learning:
+  runner: scripts/run_active_learning_screening.py
+  strategies:
+    - random
+    - extra_trees_greedy
+    - extra_trees_ucb
+    - tabpfn_greedy
+    - tabpfn_disagreement_ucb
+  initial_fractions:
+    - 0.1
+    - 0.2
+  initial_selection: random
+  top_fraction: 0.05
+  max_acquisitions: 100
+  acquisition_batch_size: 10
+  repeats: 3
+  presentation_slides:
+    - 20
+    - 21
+    - 23
+    - 24
+
+active_learning_stress_test:
+  runner: scripts/run_active_learning_screening.py
+  initial_fractions:
+    - 0.05
+  top_fraction: 0.01
+  folds:
+    - 0
+    - 1
+  max_acquisitions: 100
+  acquisition_batch_size: 10
+  repeats: 1
+  note: Mentioned in the transcript as a sensitivity check; it is not the source of every plotted bar.

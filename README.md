@@ -22,6 +22,8 @@ that representation, model class, and label-acquisition strategy all matter.
 - Active-learning workflow: `scripts/run_active_learning_screening.py`
 - Stage report and slide outline: `docs/presentation_outline_and_stage_report.md`
 - Presentation script and reproducibility notes: `docs/presentation_script.md`
+- Presentation-to-code audit and exact extension commands:
+  `docs/presentation_reproducibility.md`
 - Presentation figures: `presentation_graphs/`
 - Latest synced results: `results/`
 
@@ -48,15 +50,34 @@ GPU rerun configuration.
 
 ```bash
 python scripts/run_small_data_diagnostics.py
+python scripts/summarize_small_data_diagnostics.py
 python scripts/run_mlp_baseline_diagnostics.py
 python scripts/run_tuned_mlp_baseline_diagnostics.py
 python scripts/run_active_learning_screening.py
 ```
 
+The commands above use each runner's defaults. The exact commands and
+parameters used for the presentation are recorded in
+`docs/presentation_reproducibility.md` and
+`configs/presentation_extension_runs.yml`.
+
 Each diagnostic creates a timestamped run below `results/`. Raw feature
 caches, predictions, logs, and run snapshots stay local and are ignored by
-Git. Curated summary tables and figures are committed under
-`results/diagnostics/`.
+Git. The repository currently contains curated MLP and tuned-MLP summaries
+under `results/diagnostics/mlp/`. The small-data and active-learning runners
+and Colab entrypoints are present, but their original timestamped result trees
+are not committed; rerun or import those result trees before claiming an exact
+fresh-clone reproduction of presentation slides 14–16 and 20–24.
+
+Validate the committed presentation numbers with:
+
+```bash
+python scripts/verify_presentation_results.py
+```
+
+After rerunning the two missing diagnostic groups, pass their run directories
+to the same verifier with `--require-extensions`. See the reproducibility
+document for the complete command.
 
 ### 4. Regenerate presentation figures
 

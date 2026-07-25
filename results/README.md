@@ -16,6 +16,13 @@ Most useful files:
 - `diagnostics/mlp/`: curated MLP and tuned-MLP summaries, fold metrics,
   configurations, and compact figures.
 
+The committed primary and MLP summaries reproduce the numerical claims used
+in presentation slides 6–12 and 17–19. The small-data and active-learning
+presentation result tables are not currently committed. Their runners and
+Colab notebooks are preserved, but exact verification of slides 14–16 and
+20–24 requires either rerunning them or importing Kyle Xu's original
+timestamped result folders.
+
 Timestamped diagnostic runs are created locally in:
 
 ```text
@@ -28,3 +35,7 @@ results/tuned_mlp_baseline_diagnostics/
 These run trees can contain raw predictions, feature caches, logs, and other
 generated artifacts, so they are ignored by Git. Only compact, presentation-
 relevant summaries should be copied into `results/diagnostics/`.
+
+Use `python scripts/verify_presentation_results.py` to check the committed
+headline values and, when the missing run trees are available, the extension
+results against the rounded values shown in the presentation.

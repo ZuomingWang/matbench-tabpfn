@@ -1,7 +1,8 @@
 """
-Build slide-ready figures for the neural-network (MLP / Tuned MLP)
-diagnostics, presented together with the primary TabPFN and classical-baseline
-results so the final talk can combine both into one coherent story.
+Build slide-ready figures for the SECOND result set ("results 2"): the
+neural-network (MLP / Tuned MLP) baseline diagnostics, presented together
+with the first result set (TabPFN + classical baselines) so the final talk
+can combine both into one coherent story.
 
 Combined narrative
 ------------------
@@ -12,15 +13,14 @@ Combined narrative
    better on small, high-dimensional tabular data" (the Lab3 theme).
 
 All "our" numbers are read from CSVs (single source of truth):
-    results/mlp_baseline_diagnostics/        -> MLP run outputs
-    results/tuned_mlp_baseline_diagnostics/  -> Tuned MLP run outputs
-    results/                                 -> TabPFN + classical baseline summaries
+    results/    -> newly generated MLP runs and primary benchmark results
+    results 2/  -> imported MLP run folders from the original working copy
 
 Outputs (PNG @ 200 dpi + PDF) go into the SAME deck folder so set 1 (fig1-10)
 and set 2 (fig11-16) live together:
     presentation_graphs/
 
-Run with the project conda environment:
+Run with the project conda env:
     python scripts/make_results2_figures.py
 """
 
@@ -42,7 +42,6 @@ mpl.use("Agg")
 # --------------------------------------------------------------------------
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RES1 = os.path.join(ROOT, "results")              # set 1: TabPFN + classical
-RES2 = RES1                                       # set 2: MLP diagnostic run trees
 OUT = os.path.join(ROOT, "presentation_graphs")   # one combined deck folder
 os.makedirs(OUT, exist_ok=True)
 
@@ -58,6 +57,28 @@ def _latest(pattern):
     return hits[-1]
 
 
+def _resolve_results2_root():
+    """Prefer rerun outputs, then fall back to the imported working-copy tree."""
+    candidates = [
+        os.path.join(ROOT, "results"),
+        os.path.join(ROOT, "results 2"),
+    ]
+    for candidate in candidates:
+        mlp_hits = glob.glob(
+            os.path.join(candidate, "mlp_baseline_diagnostics", "gpu_*")
+        )
+        tuned_hits = glob.glob(
+            os.path.join(candidate, "tuned_mlp_baseline_diagnostics", "gpu_*")
+        )
+        if mlp_hits and tuned_hits:
+            return candidate
+    raise FileNotFoundError(
+        "No paired MLP and tuned-MLP run folders were found under results/ "
+        "or results 2/. Run both diagnostic scripts first."
+    )
+
+
+RES2 = _resolve_results2_root()
 MLP_DIR = _latest(os.path.join(RES2, "mlp_baseline_diagnostics", "gpu_*"))
 TUNED_DIR = _latest(os.path.join(RES2, "tuned_mlp_baseline_diagnostics", "gpu_*"))
 
@@ -174,20 +195,11 @@ def fig_nn_structure_gain():
         ax.set_ylabel(f"5-fold mean MAE ({UNIT[task]})\n(lower is better)")
         ax.set_title(TITLE[task])
         ax.set_ylim(0, ymax * 1.25)
-    handles, labels = axes[0].get_legend_handles_labels()
-    fig.legend(
-        handles,
-        labels,
-        loc="upper center",
-        bbox_to_anchor=(0.5, 0.80),
-        ncol=2,
-        frameon=True,
-        framealpha=0.95,
-    )
+    axes[0].legend(loc="upper right", frameon=True, framealpha=0.95)
     fig.suptitle("Structure-aware features help the neural network too\n"
-                 "$\\it{the\\ structure\\text{-}feature\\ gain\\ is\\ not\\ unique\\ to\\ TabPFN}$",
-                 fontsize=18, fontweight="bold", y=0.98)
-    fig.tight_layout(rect=(0, 0, 1, 0.70))
+                  "$\\it{the\\ structure\\text{-}feature\\ gain\\ is\\ not\\ unique\\ to\\ TabPFN}$",
+                 fontsize=18, fontweight="bold", y=1.07)
+    fig.tight_layout()
     save(fig, "fig11_nn_structure_gain")
 
 
@@ -233,7 +245,7 @@ def fig_combined_leaderboard():
                 error_kw=dict(ecolor="#555", lw=1.2, capsize=3))
         ax.set_yticks(range(len(names)))
         ax.set_yticklabels(names, fontsize=12.5)
-        ax.set_xlabel(f"5-fold mean MAE ({UNIT[task]})")
+        ax.set_xlabel(f"5-fold mean MAE ({UNIT[task]}) — lower is better")
         ax.set_title(f"{TITLE[task]}\n(Magpie + all structure)", fontsize=15)
         ax.set_xlim(0, vals.max() * 1.18)
         for i, v in enumerate(vals):
@@ -411,4 +423,4 @@ if __name__ == "__main__":
     fig_nn_parity()
     fig_fold_spread()
     fig_r2_by_model_class()
-    print("\nMLP diagnostic figures written to:", OUT)
+    print("\nResult-set-2 figures written to:", OUT)
