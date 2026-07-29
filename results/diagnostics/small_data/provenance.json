@@ -1,0 +1,70 @@
+{
+  "aggregation_semantics": {
+    "aulc": "Normalized trapezoidal integral of fold-mean MAE at fractions 0.1, 0.2, 0.4, 0.6, 0.8, and 1.0, divided by 0.9.",
+    "disagreement": "Full-train predictions paired by task, feature, fold, repeat, and material ID; high disagreement is >= the per-task/feature 0.75 quantile.",
+    "high_target_change": "Signed (structure - composition) / composition * 100 at full train.",
+    "learning_curve_mae": "Unweighted arithmetic mean of the five official-fold MAEs.",
+    "target_regime_mae": "Unweighted arithmetic mean of the five fold-level regime MAEs.",
+    "target_regimes": "Three pd.qcut target bins computed separately within each official test fold."
+  },
+  "canonical_run_id": "gpu_20260605_223535_utc",
+  "condition_grid_exact": true,
+  "evidence_cells": {
+    "base_summary": "HkUw4vKz_D5_",
+    "extended_summary": "WE6QKEmmBypF",
+    "latest_selector": "sRfWUGK3-6Fh",
+    "postprocessor": "L-zOELyjBseC",
+    "revision_update": "FpdNv2RiBmjW",
+    "run": "247mi-kb7PcA"
+  },
+  "executed_code": {
+    "postprocessor": {
+      "certainty": "direct_notebook_lineage",
+      "current_checkout_blob": "e8bd2409f0a7b547e82e5894dcf2cb543035c53e",
+      "current_checkout_matches_executed_blob": true,
+      "evidence": "The executed git-pull output updates cfd0314..443f218.",
+      "executed_blob": "e8bd2409f0a7b547e82e5894dcf2cb543035c53e",
+      "executed_commit": "443f218ceb79b1e35f7c9bac37f2baedfaef2ad4",
+      "path": "scripts/summarize_small_data_diagnostics.py"
+    },
+    "runner": {
+      "certainty": "direct_notebook_lineage",
+      "current_checkout_blob": "8e32410d2959f8012bc3f45aaa243f15591afdc4",
+      "current_checkout_matches_executed_blob": true,
+      "evidence": "The later git-pull output starts at cfd0314, after the model run and before adding the postprocessor.",
+      "executed_blob": "8e32410d2959f8012bc3f45aaa243f15591afdc4",
+      "executed_commit": "cfd0314fffa891360c2da77c9dbb4dd6a80f4e2d",
+      "path": "scripts/run_small_data_diagnostics.py"
+    }
+  },
+  "execution_timestamps": {
+    "247mi-kb7PcA": 1780699840271,
+    "FpdNv2RiBmjW": 1780700582229,
+    "HkUw4vKz_D5_": 1780699911037,
+    "L-zOELyjBseC": 1780700602442,
+    "WE6QKEmmBypF": 1780700623043,
+    "sRfWUGK3-6Fh": 1780699873497
+  },
+  "execution_users": [
+    "Kyle Xu"
+  ],
+  "extraction_precision": "Values are preserved exactly as displayed.",
+  "field_origins": {
+    "run_id": "Final run-root line, latest-selector output, and postprocessor updated-run line all identify the same run.",
+    "units": "Matbench task metadata used by the executed runner.",
+    "values": "Allowlisted base and extended summary display text."
+  },
+  "generator": "scripts/extract_colab_notebook_evidence.py",
+  "limitations": [
+    "The original timestamped result tree is unavailable.",
+    "Only two of eight AULC values are printed numerically in the notebook.",
+    "The complete learning-curve and target-regime CSV tables cannot be reconstructed."
+  ],
+  "redaction_policy": "Only allowlisted numeric summary fields are emitted; raw stdout and interactive prompts are never copied.",
+  "row_count": 26,
+  "schema_version": 1,
+  "source_notebook": "colab notebooks/Learning curve_data efficiency.ipynb",
+  "source_notebook_git_blob": "c235ebbcd76aa1c9a761c9feeca9ae6a26e032cc",
+  "source_notebook_sha256": "29a32ce1788ce410464405c8de04fc6b205822204acb77c893282327d96f253a",
+  "successful_cell_condition_count": 240
+}

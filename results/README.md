@@ -15,13 +15,18 @@ Most useful files:
 - `figures/05_structure_feature_branch_comparison.png`: structure-feature branch ablation.
 - `diagnostics/mlp/`: curated MLP and tuned-MLP summaries, fold metrics,
   configurations, and compact figures.
+- `diagnostics/small_data/`: sanitized numeric claims extracted from the
+  executed learning-curve notebook.
+- `diagnostics/active_learning/`: 40 standard and 16 stress-test aggregate
+  rows extracted from the executed active-learning notebook HTML tables.
 
 The committed primary and MLP summaries reproduce the numerical claims used
-in presentation slides 6–12 and 17–19. The small-data and active-learning
-presentation result tables are not currently committed. Their runners and
-Colab notebooks are preserved, but exact verification of slides 14–16 and
-20–24 requires either rerunning them or importing Kyle Xu's original
-timestamped result folders.
+in presentation slides 6–12 and 17–19. Committed notebook-display evidence
+supports the headline values in slides 14–16 and 20–24 at the precision shown
+in the executed notebooks. The original timestamped small-data and
+active-learning result trees are still unavailable, so raw predictions,
+complete traces, and undisplayed full-precision table fields cannot be
+reconstructed.
 
 Timestamped diagnostic runs are created locally in:
 
@@ -36,6 +41,10 @@ These run trees can contain raw predictions, feature caches, logs, and other
 generated artifacts, so they are ignored by Git. Only compact, presentation-
 relevant summaries should be copied into `results/diagnostics/`.
 
-Use `python scripts/verify_presentation_results.py` to check the committed
-headline values and, when the missing run trees are available, the extension
-results against the rounded values shown in the presentation.
+Use `python scripts/extract_colab_notebook_evidence.py --check` to prove that
+the compact evidence still matches the unchanged notebook outputs. Use
+`python scripts/verify_presentation_results.py` to compare all committed
+headline values with the presentation. When the relevant run directories are
+available, `--require-extensions` performs a stricter audit of the two
+small-data source summaries and active-learning aggregate summaries. It does
+not validate every raw prediction or acquisition-trace file in a run tree.

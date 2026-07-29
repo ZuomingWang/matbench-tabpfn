@@ -24,6 +24,8 @@ that representation, model class, and label-acquisition strategy all matter.
 - Presentation script and reproducibility notes: `docs/presentation_script.md`
 - Presentation-to-code audit and exact extension commands:
   `docs/presentation_reproducibility.md`
+- Executed-notebook evidence extractor:
+  `scripts/extract_colab_notebook_evidence.py`
 - Presentation figures: `presentation_graphs/`
 - Latest synced results: `results/`
 
@@ -63,21 +65,35 @@ parameters used for the presentation are recorded in
 
 Each diagnostic creates a timestamped run below `results/`. Raw feature
 caches, predictions, logs, and run snapshots stay local and are ignored by
-Git. The repository currently contains curated MLP and tuned-MLP summaries
-under `results/diagnostics/mlp/`. The small-data and active-learning runners
-and Colab entrypoints are present, but their original timestamped result trees
-are not committed; rerun or import those result trees before claiming an exact
-fresh-clone reproduction of presentation slides 14–16 and 20–24.
+Git. Curated evidence is committed under `results/diagnostics/`. For the
+small-data and active-learning sections, a standard-library extractor
+reconstructs only the numeric fields explicitly retained in Kyle Xu's executed
+Colab notebook outputs. This makes the displayed headline claims auditable
+without changing the notebooks, but it does not recreate the missing raw
+predictions, traces, or full-precision result trees.
 
 Validate the committed presentation numbers with:
 
 ```bash
+python scripts/extract_colab_notebook_evidence.py --check
 python scripts/verify_presentation_results.py
 ```
 
-After rerunning the two missing diagnostic groups, pass their run directories
-to the same verifier with `--require-extensions`. See the reproducibility
-document for the complete command.
+The default verifier checks primary, MLP, small-data notebook, and
+active-learning notebook evidence deterministically; it does not inspect
+ignored local run folders unless their directories are explicitly supplied or
+strict mode is requested. After restoring or rerunning the small-data source
+summary tables and active-learning aggregate tables, pass their run
+directories with `--require-extensions` for the stricter
+presentation-summary audit. Raw predictions and traces remain outside that
+verifier's scope. See the reproducibility document for the complete command.
+
+Security note: the historical executed notebook outputs already present on
+`main` contain a captured interactive TabPFN credential. This preservation
+update leaves Kyle Xu's notebooks byte-identical and never propagates the
+credential into extracted artifacts. Revoke or rotate it before publication;
+history cleanup should be handled separately from this contributor-preserving
+pull request.
 
 ### 4. Regenerate presentation figures
 

@@ -1,9 +1,10 @@
-"""Verify repository outputs against the rounded values used in the presentation.
+"""Verify repository evidence against the values used in the presentation.
 
 The script uses only the Python standard library so it can audit committed CSV
-files before the scientific environment is installed. Primary and MLP checks
-always run. Small-data and active-learning checks run when their result
-directories are supplied or discoverable.
+files before the scientific environment is installed. Primary, MLP, and
+notebook-derived extension checks always run. Full small-data and
+active-learning source summary-table checks run when their directories are
+supplied, or are discovered in strict mode.
 """
 
 from __future__ import annotations
@@ -15,8 +16,29 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable, Iterable
 
+try:
+    from .extract_colab_notebook_evidence import verify_artifacts
+except ImportError:
+    from extract_colab_notebook_evidence import verify_artifacts
+
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
+SMALL_NOTEBOOK_EVIDENCE = (
+    PROJECT_ROOT
+    / "results"
+    / "diagnostics"
+    / "small_data"
+    / "tables"
+    / "notebook_summary.csv"
+)
+ACTIVE_NOTEBOOK_EVIDENCE = (
+    PROJECT_ROOT
+    / "results"
+    / "diagnostics"
+    / "active_learning"
+    / "tables"
+    / "notebook_summary.csv"
+)
 
 
 @dataclass(frozen=True)
@@ -59,20 +81,46 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--active-feature-set",
         default="magpie_structure_all",
-        help="Feature set used for the clean final active-learning summary bars.",
+        help=(
+            "Presentation feature set (currently fixed to magpie_structure_all "
+            "because the expected values are condition-specific)."
+        ),
     )
     parser.add_argument(
         "--active-initial-fraction",
         type=float,
         default=0.1,
-        help="Initial labeled fraction used for the clean final summary bars.",
+        help=(
+            "Presentation initial labeled fraction (currently fixed to 0.1 "
+            "because the expected values are condition-specific)."
+        ),
     )
     parser.add_argument(
         "--require-extensions",
         action="store_true",
-        help="Fail if small-data or active-learning source tables are unavailable.",
+        help=(
+            "Fail if the small-data source summary tables or active-learning "
+            "aggregate source tables are unavailable. Committed notebook-display "
+            "evidence is not a substitute for this stricter summary-table check."
+        ),
     )
-    return parser.parse_args()
+    args = parser.parse_args()
+    if args.active_feature_set != "magpie_structure_all":
+        parser.error(
+            "--active-feature-set must be magpie_structure_all for the "
+            "presentation-value audit."
+        )
+    if not math.isclose(
+        args.active_initial_fraction,
+        0.1,
+        rel_tol=0.0,
+        abs_tol=1e-12,
+    ):
+        parser.error(
+            "--active-initial-fraction must be 0.1 for the "
+            "presentation-value audit."
+        )
+    return args
 
 
 def _read_rows(path: Path) -> list[dict[str, str]]:
@@ -222,6 +270,61 @@ def _latest_run(base: Path) -> Path | None:
     return candidates[-1] if candidates else None
 
 
+def _small_notebook_evidence_checks(path: Path) -> list[Check]:
+    rows = _read_rows(path)
+    checks: list[Check] = []
+    expected_aulc = {
+        "matbench_jdft2d": 41.53,
+        "matbench_phonons": 48.49,
+    }
+    for task, expected in expected_aulc.items():
+        row = _select_one(
+            rows,
+            source=path,
+            claim_scope="data_efficiency",
+            task=task,
+            model="tabpfn",
+            feature_set="magpie_structure_all",
+            metric="aulc_mean_mae",
+            condition="fractions_0.1_to_1.0",
+        )
+        _check(
+            checks,
+            f"{task} notebook-displayed TabPFN structure AULC",
+            row,
+            "value",
+            expected,
+            0.0051,
+        )
+
+    expected_high = {
+        ("matbench_jdft2d", "extra_trees"): -15.91,
+        ("matbench_jdft2d", "tabpfn"): -18.25,
+        ("matbench_phonons", "extra_trees"): -11.21,
+        ("matbench_phonons", "tabpfn"): -17.11,
+    }
+    for (task, model), expected in expected_high.items():
+        row = _select_one(
+            rows,
+            source=path,
+            claim_scope="target_regime",
+            task=task,
+            model=model,
+            feature_set="structure_minus_composition",
+            metric="mae_pct_change",
+            condition="high_target",
+        )
+        _check(
+            checks,
+            f"{task} {model} notebook-displayed high-target MAE change",
+            row,
+            "value",
+            expected,
+            0.0051,
+        )
+    return checks
+
+
 def _small_data_checks(run_dir: Path) -> list[Check]:
     checks: list[Check] = []
     aulc_path = run_dir / "tables" / "aulc_data_efficiency_summary.csv"
@@ -276,25 +379,24 @@ def _small_data_checks(run_dir: Path) -> list[Check]:
             "mae_pct_change_structure_minus_composition",
             expected,
             0.15,
-            transform=lambda value: abs(value),
+            transform=lambda value: -value,
         )
     return checks
 
 
-def _active_learning_checks(
-    run_dirs: list[Path],
+def _active_learning_row_checks(
+    rows: list[dict[str, str]],
     *,
+    source: Path,
     feature_set: str,
     initial_fraction: float,
+    variant: str | None = None,
+    top_fraction: float | None = None,
+    label_prefix: str = "",
+    hit_tolerance: float = 0.015,
+    regret_tolerance: float = 0.0015,
 ) -> list[Check]:
     checks: list[Check] = []
-    rows: list[dict[str, str]] = []
-    sources: list[Path] = []
-    for run_dir in run_dirs:
-        path = run_dir / "tables" / "active_learning_aggregate_summary.csv"
-        rows.extend(_read_rows(path))
-        sources.append(path)
-
     expected = {
         ("matbench_jdft2d", "random"): (0.29, 0.244),
         ("matbench_jdft2d", "extra_trees_greedy"): (0.84, 0.212),
@@ -307,7 +409,6 @@ def _active_learning_checks(
         ("matbench_phonons", "tabpfn_greedy"): (0.97, 0.000),
         ("matbench_phonons", "tabpfn_disagreement_ucb"): (0.98, 0.000),
     }
-    source = Path(", ".join(str(path) for path in sources))
     for (task, strategy), (hit_rate, regret) in expected.items():
         matching = [
             row
@@ -321,31 +422,77 @@ def _active_learning_checks(
                 rel_tol=0.0,
                 abs_tol=1e-12,
             )
+            and (variant is None or row.get("variant") == variant)
+            and (
+                top_fraction is None
+                or math.isclose(
+                    float(row.get("top_fraction", "nan")),
+                    top_fraction,
+                    rel_tol=0.0,
+                    abs_tol=1e-12,
+                )
+            )
         ]
         if len(matching) != 1:
             raise ValueError(
                 "Expected exactly one active-learning row for "
                 f"{task}, {strategy}, {feature_set}, init={initial_fraction}; "
-                f"found {len(matching)} across {source}."
+                f"found {len(matching)} in {source}."
             )
         row = matching[0]
         _check(
             checks,
-            f"{task} {strategy} final top-candidate hit rate",
+            f"{label_prefix}{task} {strategy} final top-candidate hit rate",
             row,
             "final_top_fraction_hit_rate_mean",
             hit_rate,
-            0.015,
+            hit_tolerance,
         )
         _check(
             checks,
-            f"{task} {strategy} final regret",
+            f"{label_prefix}{task} {strategy} final regret",
             row,
             "final_objective_regret_fraction_mean",
             regret,
-            0.0015,
+            regret_tolerance,
         )
     return checks
+
+
+def _active_learning_checks(
+    run_dirs: list[Path],
+    *,
+    feature_set: str,
+    initial_fraction: float,
+) -> list[Check]:
+    rows: list[dict[str, str]] = []
+    sources: list[Path] = []
+    for run_dir in run_dirs:
+        path = run_dir / "tables" / "active_learning_aggregate_summary.csv"
+        rows.extend(_read_rows(path))
+        sources.append(path)
+    source = Path(", ".join(str(path) for path in sources))
+    return _active_learning_row_checks(
+        rows,
+        source=source,
+        feature_set=feature_set,
+        initial_fraction=initial_fraction,
+        label_prefix="full-run ",
+    )
+
+
+def _active_notebook_evidence_checks(path: Path) -> list[Check]:
+    return _active_learning_row_checks(
+        _read_rows(path),
+        source=path,
+        feature_set="magpie_structure_all",
+        initial_fraction=0.1,
+        variant="presentation_standard",
+        top_fraction=0.05,
+        label_prefix="notebook-displayed ",
+        hit_tolerance=0.0051,
+        regret_tolerance=0.00051,
+    )
 
 
 def _print_checks(checks: Iterable[Check]) -> int:
@@ -363,10 +510,18 @@ def _print_checks(checks: Iterable[Check]) -> int:
 def main() -> None:
     args = _parse_args()
     checks = _committed_checks()
+    evidence_mismatches = verify_artifacts()
+    if evidence_mismatches:
+        for mismatch in evidence_mismatches:
+            print(f"FAIL  Notebook evidence {mismatch}")
+        raise SystemExit(1)
+    print("PASS  Committed notebook evidence matches the executed notebook outputs.")
+    checks.extend(_small_notebook_evidence_checks(SMALL_NOTEBOOK_EVIDENCE))
+    checks.extend(_active_notebook_evidence_checks(ACTIVE_NOTEBOOK_EVIDENCE))
     missing_extensions: list[str] = []
 
     small_run = args.small_data_run
-    if small_run is None:
+    if small_run is None and args.require_extensions:
         small_run = _latest_run(PROJECT_ROOT / "results" / "small_data_diagnostics")
     if small_run is None:
         missing_extensions.append("small-data")
@@ -374,7 +529,7 @@ def main() -> None:
         checks.extend(_small_data_checks(small_run.resolve()))
 
     active_runs = [path.resolve() for path in args.active_learning_run]
-    if not active_runs:
+    if not active_runs and args.require_extensions:
         active_base = PROJECT_ROOT / "results" / "active_learning_screening"
         discovered = sorted(path for path in active_base.glob("*") if path.is_dir())
         active_runs = discovered
@@ -391,10 +546,14 @@ def main() -> None:
 
     failures = _print_checks(checks)
     if missing_extensions:
+        if args.require_extensions:
+            message = "Missing extension source summary tables"
+        else:
+            message = "Extension source summary tables not supplied or checked"
         print(
-            "SKIP  Missing extension result trees: "
+            f"SKIP  {message}: "
             + ", ".join(missing_extensions)
-            + "."
+            + ". Notebook-display evidence was checked separately."
         )
     print(
         f"\nChecked {len(checks)} values: "
