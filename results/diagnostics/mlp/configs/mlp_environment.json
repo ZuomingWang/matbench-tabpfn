@@ -1,0 +1,51 @@
+{
+  "config": {
+    "alpha": 0.0001,
+    "early_stopping": true,
+    "feature_n_jobs": 1,
+    "feature_sets": [
+      "magpie",
+      "magpie_structure_all"
+    ],
+    "hidden_layers": [
+      128,
+      64
+    ],
+    "learning_rate_init": 0.001,
+    "max_iter": 600,
+    "n_iter_no_change": 30,
+    "random_seed": 42,
+    "show_feature_progress": false,
+    "tasks": [
+      "matbench_jdft2d",
+      "matbench_phonons"
+    ],
+    "use_feature_cache": true,
+    "validation_fraction": 0.15
+  },
+  "created_at_utc": "2026-06-06T22:07:48.856791+00:00",
+  "cuda": {
+    "available": true,
+    "device_count": 1,
+    "devices": [
+      {
+        "index": 0,
+        "name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+        "total_memory_gb": 94.971
+      }
+    ]
+  },
+  "cwd": "/content/matbench-tabpfn",
+  "packages": {
+    "matbench": "0.6",
+    "matminer": "0.10.1",
+    "numpy": "2.0.2",
+    "pandas": "2.2.2",
+    "scikit_learn": "1.6.1",
+    "tabpfn": "8.0.3",
+    "torch": "2.11.0+cu128"
+  },
+  "platform": "Linux-6.6.122+-x86_64-with-glibc2.35",
+  "python": "3.12.13 (main, Mar  4 2026, 09:23:07) [GCC 11.4.0]",
+  "python_executable": "/usr/bin/python3"
+}

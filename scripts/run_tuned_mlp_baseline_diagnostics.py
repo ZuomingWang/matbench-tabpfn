@@ -259,8 +259,8 @@ def _write_summary_text(summary_df: pd.DataFrame, path: Path) -> str:
         )
     lines.append("")
     lines.append(
-        "Use this as a Lab3-linked model-complexity check: even a tuned dense NN "
-        "must be judged against TabPFN and tree baselines on the same official folds."
+        "This model-complexity check compares a tuned dense neural network with "
+        "TabPFN and tree baselines on the same official folds."
     )
     text = "\n".join(lines).strip() + "\n"
     path.write_text(text, encoding="utf-8")

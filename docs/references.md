@@ -1,8 +1,11 @@
 # References
 
-- ICL-FM arXiv: https://arxiv.org/abs/2601.00133
-- ICL-FM / matFM GitHub: https://github.com/usccolumbia/matFM
-- TabPFN GitHub: https://github.com/PriorLabs/TabPFN
-- Matbench GitHub: https://github.com/materialsproject/matbench
-- Matbench website: https://matbench.materialsproject.org/
-- Matminer docs: https://hackingmaterials.lbl.gov/matminer/
+Q. Li, R. Dong, N. Miklaucic, *et al.*, “In context learning foundation
+models for materials property prediction with small datasets,” *npj
+Computational Materials* (2026).
+[doi:10.1038/s41524-026-02089-8](https://doi.org/10.1038/s41524-026-02089-8)
+
+- [Reference implementation](https://github.com/usccolumbia/matFM)
+- [TabPFN](https://github.com/PriorLabs/TabPFN)
+- [Matbench](https://github.com/materialsproject/matbench)
+- [Matminer](https://hackingmaterials.lbl.gov/matminer/)

@@ -1,0 +1,24 @@
+{
+  "alpha": 0.0001,
+  "early_stopping": true,
+  "feature_n_jobs": 1,
+  "feature_sets": [
+    "magpie",
+    "magpie_structure_all"
+  ],
+  "hidden_layers": [
+    128,
+    64
+  ],
+  "learning_rate_init": 0.001,
+  "max_iter": 600,
+  "n_iter_no_change": 30,
+  "random_seed": 42,
+  "show_feature_progress": false,
+  "tasks": [
+    "matbench_jdft2d",
+    "matbench_phonons"
+  ],
+  "use_feature_cache": true,
+  "validation_fraction": 0.15
+}

@@ -22,7 +22,7 @@ Second attempt:
 
 ## Interpretation
 
-This suggests the larger training set size for `matbench_expt_gap` makes local MPS inference too memory-heavy in the current environment. This is a useful project limitation to report: TabPFN was feasible on smaller tasks but did not run locally on the 4604-sample band-gap task without further memory-management changes or different hardware.
+This suggests the larger training set size for `matbench_expt_gap` makes local MPS inference too memory-heavy in the current environment. TabPFN was feasible on smaller tasks but did not run locally on the 4604-sample band-gap task without further memory-management changes or different hardware.
 
 ## Next Options
 

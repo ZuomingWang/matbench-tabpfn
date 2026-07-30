@@ -1,0 +1,21 @@
+task,target,unit,matbench_input_type,feature_source,feature_set,feature_set_display,model,model_display,fold,train_size,test_size,n_features,mae,r2,fit_seconds,predict_seconds,random_seed
+matbench_jdft2d,exfoliation_en,meV/atom,structure,composition_from_structure,magpie,Magpie composition,mlp,MLP,0,508,128,132,50.68459041324979,-0.08751778147672806,0.3501579761505127,0.001226663589477539,42
+matbench_jdft2d,exfoliation_en,meV/atom,structure,composition_from_structure,magpie,Magpie composition,mlp,MLP,1,509,127,132,64.15146969508741,0.08761675338487573,0.33375072479248047,0.0011887550354003906,42
+matbench_jdft2d,exfoliation_en,meV/atom,structure,composition_from_structure,magpie,Magpie composition,mlp,MLP,2,509,127,132,80.73087525930613,0.13782314105434945,0.13516783714294434,0.0011627674102783203,42
+matbench_jdft2d,exfoliation_en,meV/atom,structure,composition_from_structure,magpie,Magpie composition,mlp,MLP,3,509,127,132,55.39574642189545,0.008327416216736272,0.12744426727294922,0.0011680126190185547,42
+matbench_jdft2d,exfoliation_en,meV/atom,structure,composition_from_structure,magpie,Magpie composition,mlp,MLP,4,509,127,132,65.6703888336906,-0.035624464249803145,0.2041614055633545,0.0011641979217529297,42
+matbench_jdft2d,exfoliation_en,meV/atom,structure,structure,magpie_structure_all,Magpie + all structure,mlp,MLP,0,508,128,149,44.68147487644551,0.11995539696444169,0.4610428810119629,0.0013096332550048828,42
+matbench_jdft2d,exfoliation_en,meV/atom,structure,structure,magpie_structure_all,Magpie + all structure,mlp,MLP,1,509,127,149,57.09610665666983,0.2858691237403538,0.7218334674835205,0.001547098159790039,42
+matbench_jdft2d,exfoliation_en,meV/atom,structure,structure,magpie_structure_all,Magpie + all structure,mlp,MLP,2,509,127,149,65.25580297214073,0.3677467178397691,0.6231935024261475,0.0015568733215332031,42
+matbench_jdft2d,exfoliation_en,meV/atom,structure,structure,magpie_structure_all,Magpie + all structure,mlp,MLP,3,509,127,149,50.88014201388007,0.04648298081168001,0.5188083648681641,0.0013239383697509766,42
+matbench_jdft2d,exfoliation_en,meV/atom,structure,structure,magpie_structure_all,Magpie + all structure,mlp,MLP,4,509,127,149,58.889073220217035,0.07839880770012386,0.40975069999694824,0.0012969970703125,42
+matbench_phonons,last phdos peak,cm^-1,structure,composition_from_structure,magpie,Magpie composition,mlp,MLP,0,1012,253,132,97.14649575021679,0.874878497719008,2.3192222118377686,0.0015604496002197266,42
+matbench_phonons,last phdos peak,cm^-1,structure,composition_from_structure,magpie,Magpie composition,mlp,MLP,1,1012,253,132,82.79793677303665,0.8881570910995185,1.7643613815307617,0.0015053749084472656,42
+matbench_phonons,last phdos peak,cm^-1,structure,composition_from_structure,magpie,Magpie composition,mlp,MLP,2,1012,253,132,107.04519691639919,0.8191601794494926,1.1274783611297607,0.0014908313751220703,42
+matbench_phonons,last phdos peak,cm^-1,structure,composition_from_structure,magpie,Magpie composition,mlp,MLP,3,1012,253,132,86.73662634692928,0.8464393874745758,1.659048080444336,0.0015268325805664062,42
+matbench_phonons,last phdos peak,cm^-1,structure,composition_from_structure,magpie,Magpie composition,mlp,MLP,4,1012,253,132,108.993184221843,0.7895421067313425,2.0041255950927734,0.0015745162963867188,42
+matbench_phonons,last phdos peak,cm^-1,structure,structure,magpie_structure_all,Magpie + all structure,mlp,MLP,0,1012,253,150,72.91257279557675,0.9249867792021766,2.4232735633850098,0.0017330646514892578,42
+matbench_phonons,last phdos peak,cm^-1,structure,structure,magpie_structure_all,Magpie + all structure,mlp,MLP,1,1012,253,150,67.79665526963176,0.9235059879751942,2.403658390045166,0.0016410350799560547,42
+matbench_phonons,last phdos peak,cm^-1,structure,structure,magpie_structure_all,Magpie + all structure,mlp,MLP,2,1012,253,150,93.59314089644585,0.8934991773049274,0.9729211330413818,0.0015876293182373047,42
+matbench_phonons,last phdos peak,cm^-1,structure,structure,magpie_structure_all,Magpie + all structure,mlp,MLP,3,1012,253,150,77.07915137901097,0.9112046100418496,1.7465171813964844,0.0016398429870605469,42
+matbench_phonons,last phdos peak,cm^-1,structure,structure,magpie_structure_all,Magpie + all structure,mlp,MLP,4,1012,253,150,75.38826151378697,0.9270193401874189,2.364081382751465,0.001737356185913086,42

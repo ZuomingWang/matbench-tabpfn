@@ -1,0 +1,169 @@
+{
+  "condition_grids_exact": true,
+  "effective_configuration": {
+    "shared_runner_defaults": {
+      "feature_n_jobs": 1,
+      "include_oracle": false,
+      "initial_selection": "random",
+      "max_acquisition_fraction": null,
+      "n_estimators": 500,
+      "objective": "maximize",
+      "random_seed": 42,
+      "show_feature_progress": false,
+      "tabpfn_n_estimators": 8,
+      "tabpfn_predict_batch_size": 128,
+      "ucb_beta": 0.5,
+      "use_feature_cache": true
+    },
+    "standard_explicit": {
+      "acquisition_batch_size": 10,
+      "device": "cuda",
+      "initial_fractions": [
+        0.1,
+        0.2
+      ],
+      "max_acquisitions": 100,
+      "repeats": 3,
+      "strategies": [
+        "random",
+        "extra_trees_greedy",
+        "extra_trees_ucb",
+        "tabpfn_greedy",
+        "tabpfn_disagreement_ucb"
+      ]
+    },
+    "standard_runner_defaults": {
+      "folds": "all official folds",
+      "top_fraction": 0.05
+    },
+    "stress_explicit": {
+      "acquisition_batch_size": 10,
+      "device": "cuda",
+      "feature_sets": [
+        "magpie",
+        "magpie_structure_all"
+      ],
+      "folds": [
+        0,
+        1
+      ],
+      "initial_fractions": [
+        0.05
+      ],
+      "max_acquisitions": 100,
+      "repeats": 1,
+      "strategies": [
+        "random",
+        "extra_trees_greedy",
+        "tabpfn_greedy",
+        "tabpfn_disagreement_ucb"
+      ],
+      "tasks": [
+        "matbench_jdft2d",
+        "matbench_phonons"
+      ],
+      "top_fraction": 0.01
+    }
+  },
+  "evidence_cells": {
+    "standard_partial_full_metric_tables": [
+      "spgzrhvcfc-U",
+      "CfEAZSvEyF_M"
+    ],
+    "standard_runs": [
+      "XYAOY18uqyqd",
+      "7besjW9uq9Ce",
+      "ErX9iMUAq9s9",
+      "bYshnfgzrAc9"
+    ],
+    "standard_table": "9kMHymJxff3-",
+    "stress_run": "ObY4k77Hqchv",
+    "stress_table": "g3xYGPVyyAPN"
+  },
+  "executed_code": {
+    "helpers": {
+      "src/matbench_tabpfn/features.py": {
+        "certainty": "history_compatible_inference; runtime HEAD was not printed",
+        "current_checkout_blob": "7e096aa7359abcb0bb0a99af24cb7c73cba982e7",
+        "current_checkout_matches_executed_blob": true,
+        "evidence": "Repository-history compatibility; runtime HEAD was not printed by the notebook.",
+        "executed_blob": "7e096aa7359abcb0bb0a99af24cb7c73cba982e7",
+        "executed_commit": "7cf3fc1c61487b241e16dfa70666786e70cbd1af",
+        "path": "src/matbench_tabpfn/features.py"
+      },
+      "src/matbench_tabpfn/models.py": {
+        "certainty": "history_compatible_inference; runtime HEAD was not printed",
+        "current_checkout_blob": "c7e0cf4a6892b9116c0a12561020b80c4642c86c",
+        "current_checkout_matches_executed_blob": true,
+        "evidence": "Repository-history compatibility; runtime HEAD was not printed by the notebook.",
+        "executed_blob": "c7e0cf4a6892b9116c0a12561020b80c4642c86c",
+        "executed_commit": "7cf3fc1c61487b241e16dfa70666786e70cbd1af",
+        "path": "src/matbench_tabpfn/models.py"
+      },
+      "src/matbench_tabpfn/paths.py": {
+        "certainty": "history_compatible_inference; runtime HEAD was not printed",
+        "current_checkout_blob": "0b89c78797405d7c9675b5837961175fb40ff6a9",
+        "current_checkout_matches_executed_blob": true,
+        "evidence": "Repository-history compatibility; runtime HEAD was not printed by the notebook.",
+        "executed_blob": "0b89c78797405d7c9675b5837961175fb40ff6a9",
+        "executed_commit": "7cf3fc1c61487b241e16dfa70666786e70cbd1af",
+        "path": "src/matbench_tabpfn/paths.py"
+      }
+    },
+    "runner": {
+      "certainty": "history_compatible_inference; runtime HEAD was not printed",
+      "current_checkout_blob": "0731324ffebcdae89124b62881400b9bd790cec8",
+      "current_checkout_matches_executed_blob": true,
+      "evidence": "The runtime clone did not print HEAD; repository history shows this blob at the active-learning commit, notebook commit, and current checkout.",
+      "executed_blob": "0731324ffebcdae89124b62881400b9bd790cec8",
+      "executed_commit": "7cf3fc1c61487b241e16dfa70666786e70cbd1af",
+      "path": "scripts/run_active_learning_screening.py"
+    },
+    "runtime_commit_certainty": "History-compatible inference, not direct proof: the clone cell did not print a checkout SHA."
+  },
+  "execution_users": [
+    "Kyle Xu"
+  ],
+  "extraction_precision": "Values are preserved at the precision displayed by the notebook HTML.",
+  "field_origins": {
+    "blank_standard_fields": "Left blank where the 40-row table omits a field and neither partial full-metric table displays that condition.",
+    "source_run_id": "Final completion lines in successful allowlisted run cells; five rows also display source_run in the combined-head table.",
+    "standard_additional_metrics": "Full aggregate HTML tables display the remaining fields for five JDFT2D/Magpie/10% rows and ten phonons/structure/10%-20% rows.",
+    "standard_common_metrics": "The 40-row combined ranking HTML table in the executed notebook.",
+    "standard_n_runs": "Exact five-fold by three-repeat condition grids; the partial full-metric tables also display 15.",
+    "standard_top_fraction": "Executed runner default 0.05; the standard commands do not override it, and a rendered run summary corroborates it.",
+    "stress_metrics": "The complete 16-row aggregate HTML table in the executed notebook.",
+    "units": "Displayed Matbench task metadata in the partial standard and complete stress tables."
+  },
+  "generator": "scripts/extract_colab_notebook_evidence.py",
+  "limitations": [
+    "The original timestamped result trees and trace CSV are unavailable.",
+    "Only three aggregate metrics are displayed for all 40 standard conditions.",
+    "Additional aggregate fields are displayed for only 15 standard conditions.",
+    "Exact acquisition trajectories cannot be reconstructed from embedded PNGs.",
+    "Stress-test conditions contain only two runs each."
+  ],
+  "redaction_policy": "Only allowlisted HTML table cells and completion identifiers are emitted; raw stdout and interactive prompts are never copied.",
+  "row_count": 56,
+  "schema_version": 1,
+  "source_notebook": "colab notebooks/Active learning.ipynb",
+  "source_notebook_git_blob": "c5b48d5d1a502746872471e043b775b4348a3821",
+  "source_notebook_sha256": "ae5dac7182c75927d8f0c941efc7e20eaa5f7c2b7ef256fcbd7287120531b5ba",
+  "standard_row_count": 40,
+  "standard_rows_with_additional_full_metrics": 15,
+  "standard_run_map": {
+    "matbench_jdft2d/magpie": "gpu_20260606_160326_utc",
+    "matbench_jdft2d/magpie_structure_all": "gpu_20260606_164604_utc",
+    "matbench_phonons/magpie": "gpu_20260606_173042_utc",
+    "matbench_phonons/magpie_structure_all": "gpu_20260606_183904_utc"
+  },
+  "stress_row_count": 16,
+  "stress_run_id": "gpu_20260606_204419_utc",
+  "successful_cell_condition_counts": {
+    "gpu_20260606_160326_utc": 150,
+    "gpu_20260606_164604_utc": 150,
+    "gpu_20260606_173042_utc": 150,
+    "gpu_20260606_183904_utc": 150,
+    "gpu_20260606_204419_utc": 32
+  }
+}
