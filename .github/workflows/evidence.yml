@@ -1,0 +1,31 @@
+name: Verify committed evidence
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run standard-library regression tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Check extracted notebook evidence
+        run: python scripts/extract_colab_notebook_evidence.py --check
+
+      - name: Verify committed results
+        run: python scripts/verify_results.py

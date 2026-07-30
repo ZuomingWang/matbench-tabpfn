@@ -42,7 +42,7 @@ TabPFN gives the lowest MAE so far on `matbench_steels`.
 - Extra Trees MAE: 90.834 MPa
 - TabPFN MAE: 87.677 MPa
 
-TabPFN improves MAE by 15.99% relative to Random Forest and 3.47% relative to Extra Trees. Extra Trees still has higher mean R2, so the final report should discuss the metric tradeoff rather than claiming TabPFN dominates every metric.
+TabPFN improves MAE by 15.99% relative to Random Forest and 3.47% relative to Extra Trees. Extra Trees still has higher mean R2, so the result should be interpreted as a metric tradeoff rather than universal dominance.
 
 ## Outputs
 

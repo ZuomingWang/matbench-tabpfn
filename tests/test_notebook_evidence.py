@@ -44,7 +44,7 @@ class NotebookEvidenceTests(unittest.TestCase):
         self.assertEqual(len(small_rows), 26)
         self.assertEqual(len(active_rows), 56)
         variants = [row["variant"] for row in active_rows]
-        self.assertEqual(variants.count("presentation_standard"), 40)
+        self.assertEqual(variants.count("standard_top5pct"), 40)
         self.assertEqual(variants.count("stress_top1pct"), 16)
         self.assertEqual(
             {row["unit"] for row in small_rows if row["task"] == "matbench_jdft2d"},
@@ -55,7 +55,7 @@ class NotebookEvidenceTests(unittest.TestCase):
             {"meV/atom", "cm^-1"},
         )
         standard_rows = [
-            row for row in active_rows if row["variant"] == "presentation_standard"
+            row for row in active_rows if row["variant"] == "standard_top5pct"
         ]
         self.assertEqual(
             sum(bool(row["found_global_best_rate"]) for row in standard_rows),

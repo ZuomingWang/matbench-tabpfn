@@ -1,25 +1,13 @@
-# MLP Diagnostic Results
+# Dense-MLP diagnostics
 
-These are the compact, Git-tracked outputs from the dense-neural-network
-extension. The full timestamped run trees remain local because they contain
-feature caches, raw predictions, logs, and other generated artifacts.
+Compact outputs for plain and inner-validation-tuned dense MLPs on JDFT2D and
+phonons using composition-only and structure-aware features.
 
-## Runs
+Structure features improve both MLP variants, but neither closes the gap to
+TabPFN or the strongest tree baselines.
 
-- Plain MLP: `gpu_20260606_220748_utc`
-- Inner-validation-tuned MLP: `gpu_20260606_221140_utc`
-- Tasks: `matbench_jdft2d`, `matbench_phonons`
-- Feature branches: Magpie composition and Magpie plus all structure descriptors
-- Evaluation: official Matbench five-fold splits
-- Random seed: 42
+- Tuned JDFT2D MAE: `55.19 meV/atom`
+- Tuned phonons MAE: `73.99 cm⁻¹`
 
-## Main result
-
-Structure-aware features improve both neural-network variants, but neither MLP
-matches the TabPFN or strongest tree baselines on these small tabular datasets.
-The tuned MLP reaches MAE 55.19 on `matbench_jdft2d` and 73.99 on
-`matbench_phonons` with all structure descriptors.
-
-The `configs/`, `metrics/`, `tables/`, and `figures/` subdirectories contain
-the minimal data needed to audit the reported aggregate result. Presentation
-comparisons are in `presentation_graphs/fig11` through `fig16`.
+Configuration, fold metrics, summaries, and figures are tracked here. Full
+timestamped runs remain local.

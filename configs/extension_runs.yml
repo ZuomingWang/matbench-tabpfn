@@ -1,0 +1,85 @@
+# Reference configuration for the diagnostic extensions.
+
+shared:
+  random_seed: 42
+  tasks:
+    - matbench_jdft2d
+    - matbench_phonons
+  feature_sets:
+    - magpie
+    - magpie_structure_all
+  official_folds: all
+  tabpfn:
+    device: cuda
+    n_estimators: 8
+    predict_batch_size: 128
+
+small_data:
+  runner: scripts/run_small_data_diagnostics.py
+  notebook: colab notebooks/Learning curve_data efficiency.ipynb
+  canonical_run_id: gpu_20260605_223535_utc
+  extracted_table: results/diagnostics/small_data/tables/notebook_summary.csv
+  provenance: results/diagnostics/small_data/provenance.json
+  models:
+    - extra_trees
+    - tabpfn
+  fractions:
+    - 0.1
+    - 0.2
+    - 0.4
+    - 0.6
+    - 0.8
+    - 1.0
+  repeats: 1
+  postprocess: scripts/summarize_small_data_diagnostics.py
+
+mlp:
+  runner: scripts/run_mlp_baseline_diagnostics.py
+  use_runner_defaults: true
+
+tuned_mlp:
+  runner: scripts/run_tuned_mlp_baseline_diagnostics.py
+  use_runner_defaults: true
+  selection: inner_validation_within_each_official_training_fold
+
+active_learning:
+  runner: scripts/run_active_learning_screening.py
+  notebook: colab notebooks/Active learning.ipynb
+  run_ids:
+    - gpu_20260606_160326_utc
+    - gpu_20260606_164604_utc
+    - gpu_20260606_173042_utc
+    - gpu_20260606_183904_utc
+  extracted_table: results/diagnostics/active_learning/tables/notebook_summary.csv
+  provenance: results/diagnostics/active_learning/provenance.json
+  strategies:
+    - random
+    - extra_trees_greedy
+    - extra_trees_ucb
+    - tabpfn_greedy
+    - tabpfn_disagreement_ucb
+  initial_fractions:
+    - 0.1
+    - 0.2
+  initial_selection: random
+  top_fraction: 0.05
+  max_acquisitions: 100
+  acquisition_batch_size: 10
+  repeats: 3
+
+active_learning_stress_test:
+  runner: scripts/run_active_learning_screening.py
+  run_id: gpu_20260606_204419_utc
+  strategies:
+    - random
+    - extra_trees_greedy
+    - tabpfn_greedy
+    - tabpfn_disagreement_ucb
+  initial_fraction: 0.05
+  top_fraction: 0.01
+  folds:
+    - 0
+    - 1
+  max_acquisitions: 100
+  acquisition_batch_size: 10
+  repeats: 1

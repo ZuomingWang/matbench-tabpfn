@@ -1,8 +1,8 @@
 """Dense neural-network baseline for the Matbench TabPFN project.
 
 This is a separate, optional extension from the small-data TabPFN diagnostic.
-It connects the final project to the Lab3 neural-network theme by testing a
-plain dense MLP on the same Magpie and structure-aware descriptor matrices.
+It tests a plain dense MLP on the same Magpie and structure-aware descriptor
+matrices for a direct model-class comparison.
 
 Outputs go under:
 
@@ -160,7 +160,7 @@ def _write_summary_text(summary_df: pd.DataFrame, path: Path) -> str:
         "",
         "This optional extension tests whether a plain dense neural network can "
         "compete with the TabPFN/ExtraTrees workflow on the same descriptor "
-        "matrices. It is mainly a Lab3 connection and a model-complexity check.",
+        "matrices as a model-complexity check.",
         "",
     ]
     for task, task_df in summary_df.groupby("task", sort=False):
@@ -176,8 +176,8 @@ def _write_summary_text(summary_df: pd.DataFrame, path: Path) -> str:
     lines.append("")
     lines.append(
         "Interpretation guide: if the MLP underperforms TabPFN or tree baselines, "
-        "that supports the course theme that dense neural networks are not "
-        "automatically better on small, high-dimensional tabular materials data."
+        "dense neural networks are not automatically better on small, "
+        "high-dimensional tabular materials data."
     )
     text = "\n".join(lines).strip() + "\n"
     path.write_text(text, encoding="utf-8")

@@ -1263,7 +1263,7 @@ def _extract_active_learning(
         row = {field: "" for field in ACTIVE_FIELDS}
         row.update(
             {
-                "variant": "presentation_standard",
+                "variant": "standard_top5pct",
                 "source_run_id": run_map[(task, feature_set)],
                 "task": task,
                 "unit": TASK_UNITS[task],
@@ -1343,7 +1343,7 @@ def _extract_active_learning(
 
     rows.sort(
         key=lambda row: (
-            0 if row["variant"] == "presentation_standard" else 1,
+            0 if row["variant"] == "standard_top5pct" else 1,
             TASK_ORDER[row["task"]],
             FEATURE_ORDER[row["feature_set"]],
             float(row["initial_fraction"]),

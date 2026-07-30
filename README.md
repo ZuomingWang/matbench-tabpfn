@@ -1,167 +1,49 @@
-# Matbench TabPFN Small-Data Workflow
+# matbench-tabpfn
 
-This project evaluates a TabPFN/ICL-FM-style workflow for small-data materials
-property prediction on selected Matbench regression tasks. It reproduces the
-core official-fold benchmark, extends the representation with lightweight
-structure-aware features, and adds data-efficiency, neural-network, and
-active-learning diagnostics.
+Benchmarks TabPFN on official Matbench folds for four materials-regression
+tasks. Covers structure features, data efficiency, MLP baselines, and
+model-guided candidate screening.
 
-The main result is that physically meaningful structure descriptors
-substantially improve performance on structure-dependent materials tasks.
-TabPFN is strong in the small-data regime, but the diagnostic extensions show
-that representation, model class, and label-acquisition strategy all matter.
+## Results
 
-## Start Here
+| Result | JDFT2D | Phonons |
+|---|---:|---:|
+| TabPFN + structure MAE | 34.40 meV/atom | 30.63 cm⁻¹ |
+| MAE reduction vs composition only | 25.4% | 16.9% |
+| Tuned MLP + structure MAE | 55.2 meV/atom | 74.0 cm⁻¹ |
+| Model-guided candidate recovery | 84–87% | 97–98% |
+| Random recovery at the same label budget | 29% | 21% |
 
-- Main notebook: `notebooks/matbench_tabpfn_official_folds.ipynb`
-- Experiment config: `configs/gpu_rerun.yml`
-- Small-data/data-efficiency workflow: `scripts/run_small_data_diagnostics.py`
-- Dense-neural-network workflows:
-  `scripts/run_mlp_baseline_diagnostics.py` and
-  `scripts/run_tuned_mlp_baseline_diagnostics.py`
-- Active-learning workflow: `scripts/run_active_learning_screening.py`
-- Stage report and slide outline: `docs/presentation_outline_and_stage_report.md`
-- Presentation script and reproducibility notes: `docs/presentation_script.md`
-- Presentation-to-code audit and exact extension commands:
-  `docs/presentation_reproducibility.md`
-- Executed-notebook evidence extractor:
-  `scripts/extract_colab_notebook_evidence.py`
-- Presentation figures: `presentation_graphs/`
-- Latest synced results: `results/`
+MAE values are five-fold means. Screening starts from 10% labeled data;
+recovery is measured on the top 5% of candidates.
 
-## Workflow
+## Run
 
-### 1. Set up the environment
+Recommended: Google Colab with CUDA. Run the notebooks in order:
+
+1. [Official-fold benchmark](notebooks/matbench_tabpfn_official_folds.ipynb)
+2. [Learning curves](colab%20notebooks/Learning%20curve_data%20efficiency.ipynb)
+3. [Dense-MLP baseline](colab%20notebooks/Simple%20neural-network%20baseline.ipynb)
+4. [Active-learning screening](colab%20notebooks/Active%20learning.ipynb)
+
+Set the TabPFN credential through the notebook prompt or `TABPFN_TOKEN`.
+
+Local setup:
 
 ```bash
+git clone https://github.com/ZuomingWang/matbench-tabpfn.git
+cd matbench-tabpfn
 bash scripts/setup_env.sh
 conda activate matbench-tabpfn
 python scripts/check_setup.py
 ```
 
-Do not save a TabPFN token in project files. Use the notebook prompt or the
-`TABPFN_TOKEN` environment variable.
-
-### 2. Run the official-fold benchmark
-
-Use `notebooks/matbench_tabpfn_official_folds.ipynb` for the primary
-TabPFN/classical-model study. `configs/gpu_rerun.yml` records the reproducible
-GPU rerun configuration.
-
-### 3. Run optional diagnostic extensions
+## Check
 
 ```bash
-python scripts/run_small_data_diagnostics.py
-python scripts/summarize_small_data_diagnostics.py
-python scripts/run_mlp_baseline_diagnostics.py
-python scripts/run_tuned_mlp_baseline_diagnostics.py
-python scripts/run_active_learning_screening.py
-```
-
-The commands above use each runner's defaults. The exact commands and
-parameters used for the presentation are recorded in
-`docs/presentation_reproducibility.md` and
-`configs/presentation_extension_runs.yml`.
-
-Each diagnostic creates a timestamped run below `results/`. Raw feature
-caches, predictions, logs, and run snapshots stay local and are ignored by
-Git. Curated evidence is committed under `results/diagnostics/`. For the
-small-data and active-learning sections, a standard-library extractor
-reconstructs only the numeric fields explicitly retained in Kyle Xu's executed
-Colab notebook outputs. This makes the displayed headline claims auditable
-without changing the notebooks, but it does not recreate the missing raw
-predictions, traces, or full-precision result trees.
-
-Validate the committed presentation numbers with:
-
-```bash
+python -m unittest discover -s tests -v
 python scripts/extract_colab_notebook_evidence.py --check
-python scripts/verify_presentation_results.py
+python scripts/verify_results.py
 ```
 
-The default verifier checks primary, MLP, small-data notebook, and
-active-learning notebook evidence deterministically; it does not inspect
-ignored local run folders unless their directories are explicitly supplied or
-strict mode is requested. After restoring or rerunning the small-data source
-summary tables and active-learning aggregate tables, pass their run
-directories with `--require-extensions` for the stricter
-presentation-summary audit. Raw predictions and traces remain outside that
-verifier's scope. See the reproducibility document for the complete command.
-
-Security note: the historical executed notebook outputs already present on
-`main` contain a captured interactive TabPFN credential. This preservation
-update leaves Kyle Xu's notebooks byte-identical and never propagates the
-credential into extracted artifacts. Revoke or rotate it before publication;
-history cleanup should be handled separately from this contributor-preserving
-pull request.
-
-### 4. Regenerate presentation figures
-
-```bash
-python scripts/make_presentation_figures.py
-python scripts/make_results2_figures.py
-```
-
-The second command uses the newest local MLP and tuned-MLP diagnostic runs.
-Both commands write slide-ready PNG and PDF files to `presentation_graphs/`.
-
-## Current Results
-
-The current run evaluates:
-
-- `matbench_steels`
-- `matbench_expt_gap`
-- `matbench_jdft2d`
-- `matbench_phonons`
-
-The current best-model summary is in:
-
-```text
-results/tables/best_models_by_task.csv
-```
-
-The complete model summary is in:
-
-```text
-results/metrics/model_summary.csv
-```
-
-The most useful presentation figures are:
-
-```text
-presentation_graphs/fig1_structure_gain.png
-presentation_graphs/fig5_tabpfn_vs_baseline.png
-presentation_graphs/fig11_nn_structure_gain.png
-presentation_graphs/fig12_combined_leaderboard.png
-```
-
-## Headline Interpretation
-
-- TabPFN is competitive on the selected small-data Matbench tasks, but it does not uniformly beat the published paper or leaderboard numbers.
-- Structure-aware descriptors are the clearest improvement:
-  - `matbench_jdft2d`: best structure branch improves over the composition proxy by about 25% MAE.
-  - `matbench_phonons`: best structure branch improves over the composition proxy by about 17% MAE.
-- The project should be presented as a staged reproduction of the TabPFN/ICL-FM idea plus a structure-aware featurization extension.
-- A plain or inner-validation-tuned dense MLP improves with structure features
-  but remains behind TabPFN and the strongest tree baselines on the two
-  structure tasks.
-- The small-data and active-learning extensions test label efficiency and
-  model-guided candidate screening beyond the static full-data benchmark.
-- This stage does not reproduce the paper's ALIGNN/CGCNN embedding pipeline.
-
-## Repository Layout
-
-- `configs/`: experiment configuration.
-- `colab notebooks/`: Colab entrypoints for the extension workflows.
-- `docs/`: project context, references, presentation outline, and speaker script.
-- `notebooks/`: active runnable notebook.
-- `presentation_graphs/`: slide-ready figures from the primary and MLP studies.
-- `src/matbench_tabpfn/`: reusable feature, model, evaluation, plotting, and analysis code.
-- `scripts/`: environment setup, experiment runners, summaries, and figure generation.
-- `results/`: synced primary results and curated diagnostic summaries.
-- `ref/` and `ref_lab_notebook/`: reference papers and course notebooks.
-- `archive/`: older exploratory notebooks and notes kept for provenance.
-
-## GitHub Notes
-
-The repository is configured to keep key result summaries and figures while ignoring heavier generated files such as raw predictions, feature caches, logs, temporary PDF renders, and rerun directories.
+[Results](results/README.md) · [Reproducibility](docs/reproducibility.md) · [References](docs/references.md) · [Contributors](CONTRIBUTORS.md)

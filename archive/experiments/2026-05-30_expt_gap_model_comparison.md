@@ -32,7 +32,7 @@ Check whether the workflow and modeling conclusions from `matbench_steels` trans
 
 ## Interpretation
 
-Extra Trees is again the strongest non-TabPFN model, improving over Random Forest on a second task. This supports a stronger project claim than the initial steels-only result: randomized tree ensembles are a robust classical baseline for Magpie composition features on these small-to-medium Matbench regression tasks.
+Extra Trees is again the strongest non-TabPFN model, improving over Random Forest on a second task. Together with the steels result, this shows that randomized tree ensembles are a robust classical baseline for Magpie composition features on these small-to-medium Matbench regression tasks.
 
 RidgeCV performs poorly on this task, likely because the linear model is not well matched to the nonlinear composition-property relationship and the descriptor space is highly correlated. The dummy mean baseline is included as a stable lower reference.
 
